@@ -52,7 +52,18 @@ pipeline {
         stage('OWASP ZAP Analysis') {
             steps {
                 script {
-                    sh 'docker run -t owasp/zap2docker-stable zap-baseline.py -t http://localhost || true'
+                    sh 'docker run -d --name owasp-zap -t owasp/zap2docker-stable zap-baseline.py -t http://localhost || true'
+                }
+            }
+        }
+        stage('Container Clean-Up') {
+            steps {
+                script {
+                    sh """
+                        docker kill $(docker ps -q)
+                        docker rm $(docker ps -a -q)
+                        docker rmi $(docker images -q)
+                    """
                 }
             }
         }

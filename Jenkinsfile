@@ -41,11 +41,10 @@ pipeline {
         stage('Build and Launch Tomcat App') {
             steps {
                 script {
-                    sh """
-                        cp -r ../${env.JOB_NAME}@2/target .
-                        docker build . -t javawebapp
-                        docker run -d -p 8031:8080 --name test javawebapp
-                    """
+                    sh "cp -r ../${env.JOB_NAME}@2/target ."
+                    sh 'docker build . -t javawebapp'
+                    sh '[ $(docker ps -a | grep test) ] && docker kill test; docker rm test'
+                    sh 'docker run -d -p 8031:8080 --name test javawebapp'
                 }
             }
         }

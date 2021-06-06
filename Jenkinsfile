@@ -44,7 +44,7 @@ pipeline {
                     sh "cp -r ../${env.JOB_NAME}@2/target ."
                     sh 'docker build . -t javawebapp'
                     sh 'if [ "$(docker ps -a | grep test)" ]; then docker kill test; docker rm test; fi'
-                    sh 'docker run -d -it --rm -p 8031:8080 --name test javawebapp'
+                    sh 'docker run -it --rm -p 8031:8080 --name test javawebapp'
                 }
             }
         }

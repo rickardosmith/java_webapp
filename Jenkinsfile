@@ -54,7 +54,7 @@ pipeline {
                 script {
                     sh 'if [ "$(docker ps -q | grep owasp-zap)" ]; then docker kill owasp-zap; fi'
                     sh 'if [ "$(docker ps -a | grep owasp-zap)" ]; then docker rm owasp-zap; fi'
-                    sh 'docker run --name owasp-zap -t owasp/zap2docker-stable zap-baseline.py -t http://127.0.0.1:8031'
+                    sh 'docker run --name owasp-zap -t owasp/zap2docker-stable zap-baseline.py -t http://192.168.50.200:8031'
                 }
             }
         }

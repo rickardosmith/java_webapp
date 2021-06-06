@@ -1,6 +1,4 @@
-FROM tomcat:jdk8-corretto
-WORKDIR webapps
-COPY target/SampleWebApplication.war .
-RUN rm -rf ROOT && mv SampleWebApplication.war ROOT.war
+FROM tomcat:8.0-alpine
+ADD target/SampleWebApplication.war /usr/local/tomcat/webapps/
 EXPOSE 8080
 CMD [“catalina.sh”, “run”]

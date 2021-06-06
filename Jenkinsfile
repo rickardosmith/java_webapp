@@ -51,6 +51,7 @@ pipeline {
         stage('OWASP ZAP Analysis') {
             steps {
                 script {
+                    sh 'if [ "$(docker ps -a | grep owasp-zap)" ]; then docker kill owasp-zap; docker rm owasp-zap; fi'
                     sh 'docker run --name owasp-zap -t owasp/zap2docker-stable zap-baseline.py -t http://127.0.0.1:8031'
                 }
             }

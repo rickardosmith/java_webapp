@@ -45,7 +45,7 @@ pipeline {
                     sh 'docker build -t javawebapp .'
                     sh 'if [ "$(docker ps -q | grep test)" ]; then docker kill test; fi'
                     sh 'if [ "$(docker ps -a | grep test)" ]; then docker rm test; fi'
-                    sh 'docker run -p 8031:8080 --name test javawebapp'
+                    sh 'docker run -d -p 8031:8080 --name test javawebapp'
                 }
             }
         }
@@ -61,8 +61,9 @@ pipeline {
         stage('Container Clean-Up') {
             steps {
                 script {
-                    sh 'docker kill $(docker ps -q)'
-                    sh 'docker rm $(docker ps -a -q)'
+                    sh 'docker stop javawebapp'
+                    // sh 'docker kill $(docker ps -q)'
+                    // sh 'docker rm $(docker ps -a -q)'
                     // sh 'docker rmi $(docker images -q)'
                 }
             }

@@ -43,7 +43,8 @@ pipeline {
                 script {
                     sh "cp -r ../${env.JOB_NAME}@2/target ."
                     sh 'docker build -t javawebapp .'
-                    sh 'if [ "$(docker ps -a | grep test)" ]; then docker kill test; docker rm test; fi'
+                    sh 'if [ "$(docker ps -q | grep test)" ]; then docker kill test; fi'
+                    sh 'if [ "$(docker ps -a | grep test)" ]; then docker rm test; fi'
                     sh 'docker run -p 8031:8080 --name test javawebapp'
                 }
             }
@@ -51,7 +52,8 @@ pipeline {
         stage('OWASP ZAP Analysis') {
             steps {
                 script {
-                    sh 'if [ "$(docker ps -a | grep owasp-zap)" ]; then docker kill owasp-zap; docker rm owasp-zap; fi'
+                    sh 'if [ "$(docker ps -q | grep owasp-zap)" ]; then docker kill owasp-zap; fi'
+                    sh 'if [ "$(docker ps -a | grep owasp-zap)" ]; then docker rm owasp-zap; fi'
                     sh 'docker run --name owasp-zap -t owasp/zap2docker-stable zap-baseline.py -t http://127.0.0.1:8031'
                 }
             }

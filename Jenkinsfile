@@ -62,7 +62,7 @@ pipeline {
         stage('Build and Deploy') {
             steps {
                 script {
-                    sh 'cp -r ../${env.JOB_NAME}@2/target .'
+                    sh 'cp -r ../"${env.JOB_NAME}"@2/target .'
                     withCredentials([string(credentialsId: 'dockerHubToken', variable: 'TOKEN')]) {
                         sh """
                             docker login -u wizkiddja -p ${TOKEN}

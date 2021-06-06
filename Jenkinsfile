@@ -34,9 +34,7 @@ pipeline {
                             error "Pipeline aborted due to quality gate failure: ${qg.status}"
                         }
                     }
-                    sh """
-                        mvn clean install
-                    """
+                    sh 'mvn clean install'
                 }
             }
         }
@@ -64,6 +62,7 @@ pipeline {
         stage('Build and Deploy') {
             steps {
                 script {
+                    sh 'cp -r ../${env.JOB_NAME}@2/target .'
                     withCredentials([string(credentialsId: 'dockerHubToken', variable: 'TOKEN')]) {
                         sh """
                             docker login -u wizkiddja -p ${TOKEN}

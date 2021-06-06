@@ -1,5 +1,5 @@
 FROM tomcat:jdk8-corretto
-WORKDIR webapps
-COPY target/SampleWebApplication.war .
+ADD target/SampleWebApplication.war /usr/local/tomcat/webapps/
 RUN rm -rf ROOT && mv SampleWebApplication.war ROOT.war
-ENTRYPOINT ["sh", "/usr/local/tomcat/bin/startup.sh"]
+EXPOSE 8080
+CMD [“catalina.sh”, “run”]

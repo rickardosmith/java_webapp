@@ -54,19 +54,19 @@ pipeline {
                 script {
                     sh 'if [ "$(docker ps | grep owasp-zap)" ]; then docker kill owasp-zap; fi'
                     sh 'if [ "$(docker ps -a | grep owasp-zap)" ]; then docker rm owasp-zap; fi'
-                    sh 'docker run --name owasp-zap -t owasp/zap2docker-stable zap-baseline.py -t http://192.168.50.200:8031'
+                    sh 'docker run --name owasp-zap -t owasp/zap2docker-stable zap-baseline.py -t http://192.168.50.200:8031 || true'
                 }
             }
         }
-        // stage('Container Clean-Up') {
-        //     steps {
-        //         script {
-        //             // sh 'docker kill $(docker ps -q)'
-        //             // sh 'docker rm $(docker ps -a -q)'
-        //             // sh 'docker rmi $(docker images -q)'
-        //         }
-        //     }
-        // }
+        stage('Container Clean-Up') {
+            steps {
+                script {
+                    sh 'docker kill $(docker ps -q)'
+                    sh 'docker rm $(docker ps -a -q)'
+                    sh 'docker rmi $(docker images -q)'
+                }
+            }
+        }
         stage('Terraform') {
             steps {
                 script {

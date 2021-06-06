@@ -51,19 +51,19 @@ pipeline {
         stage('OWASP ZAP Analysis') {
             steps {
                 script {
-                    sh 'docker run -d --name owasp-zap -t owasp/zap2docker-stable zap-baseline.py -t http://127.0.0.1:8031 || true'
+                    sh 'docker run -d --name owasp-zap -t owasp/zap2docker-stable zap-baseline.py -t http://127.0.0.1:8031'
                 }
             }
         }
-        stage('Container Clean-Up') {
-            steps {
-                script {
-                    sh 'docker kill $(docker ps -q)'
-                    sh 'docker rm $(docker ps -a -q)'
-                    sh 'docker rmi $(docker images -q)'
-                }
-            }
-        }
+        // stage('Container Clean-Up') {
+        //     steps {
+        //         script {
+        //             sh 'docker kill $(docker ps -q)'
+        //             sh 'docker rm $(docker ps -a -q)'
+        //             sh 'docker rmi $(docker images -q)'
+        //         }
+        //     }
+        // }
         stage('Terraform') {
             steps {
                 script {

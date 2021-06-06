@@ -24,7 +24,7 @@ pipeline {
             }
             steps {
                 script {
-                    withSonarQubeEnv('SonarServer') {
+                    withSonarQubeEnv('javaWebApp') {
                         sh 'mvn clean sonar:sonar'
                     }
 

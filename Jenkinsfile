@@ -44,7 +44,7 @@ pipeline {
                     sh """
                         cp -r ../${env.JOB_NAME}@2/target .
                         docker build . -t javawebapp
-                        docker run -d -p 80:8080 --name test javawebapp
+                        docker run -d -p 8031:8080 --name test javawebapp
                     """
                 }
             }
@@ -52,7 +52,7 @@ pipeline {
         stage('OWASP ZAP Analysis') {
             steps {
                 script {
-                    sh 'docker run -d --name owasp-zap -t owasp/zap2docker-stable zap-baseline.py -t http://localhost || true'
+                    sh 'docker run -d --name owasp-zap -t owasp/zap2docker-stable zap-baseline.py -t http://127.0.0.1:8031 || true'
                 }
             }
         }

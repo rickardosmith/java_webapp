@@ -15,7 +15,7 @@ pipeline {
     }
 
     stages {
-        stage('SonarCube Analysis') {
+        stage('SonarCube Analysis - SAST') {
             agent {
                 docker {
                     image 'maven:3.8.1-jdk-8'
@@ -38,18 +38,31 @@ pipeline {
                 }
             }
         }
-        stage('Build and Launch Tomcat App') {
+        stage('Build') {
             steps {
                 script {
                     sh "cp -r ../${env.JOB_NAME}@2/target ."
                     sh 'docker build -t javawebapp .'
+                }
+            }
+        }
+        stage('Upload Artifact') {
+            steps {
+                script {
+                    sh 'echo Coming soon...'
+                }
+            }
+        }
+        stage('Deploy') {
+            steps {
+                script {
                     sh 'if [ "$(docker ps | grep test)" ]; then docker kill test; fi'
                     sh 'if [ "$(docker ps -a | grep test)" ]; then docker rm test; fi'
                     sh 'docker run -d -p 8031:8080 --name test javawebapp'
                 }
             }
         }
-        stage('OWASP ZAP Analysis') {
+        stage('OWASP ZAP Analysis - DAST') {
             steps {
                 script {
                     sh 'if [ "$(docker ps | grep owasp-zap)" ]; then docker kill owasp-zap; fi'
@@ -63,36 +76,9 @@ pipeline {
                 script {
                     sh 'docker kill $(docker ps -q)'
                     sh 'docker rm $(docker ps -a -q)'
-                    sh 'docker rmi $(docker images -q)'
+                    // sh 'docker rmi $(docker images -q)'e
                 }
             }
         }
-        stage('Terraform') {
-            steps {
-                script {
-                    sh 'echo Coming soon...'
-                }
-            }
-        }
-        stage('Ansible') {
-            steps {
-                script {
-                    sh 'echo Coming soon...'
-                }
-            }
-        }
-        // stage('Build and Deploy') {
-        //     steps {
-        //         script {
-        //             sh "cp -r ../${env.JOB_NAME}@2/target ."
-        //             withCredentials([string(credentialsId: 'dockerHubToken', variable: 'TOKEN')]) {
-        //                 sh """
-        //                     docker login -u wizkiddja -p ${TOKEN}
-        //                     docker build . -t wizkiddja/demosite:${Git_Revision_Tag}
-        //                 """
-        //             }
-        //         }
-        //     }
-        // }
     }
 }

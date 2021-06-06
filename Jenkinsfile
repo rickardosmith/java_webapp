@@ -36,7 +36,9 @@ pipeline {
                     }
                     sh """
                         mvn clean install
-                        cp target/SampleWebApplication.war /tmp/SampleWebApplication.war
+                        echo ${env.JOB_NAME}
+                        mkdir -p ../"${env.JOB_NAME}"/target
+                        if [ ! -f "../${env.JOB_NAME}/target/SampleWebApplication.war" ]; then cp target/SampleWebApplication.war ../"${env.JOB_NAME}"/target/; fi
                     """
                 }
             }

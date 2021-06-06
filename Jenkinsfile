@@ -36,7 +36,7 @@ pipeline {
                     }
                     sh """
                         mvn clean install
-                        cp target/SampleWebApplication.war /tmp/target/SampleWebApplication.war
+                        cp target/SampleWebApplication.war /tmp/SampleWebApplication.war
                     """
                 }
             }

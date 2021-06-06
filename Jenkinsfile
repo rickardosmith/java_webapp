@@ -55,15 +55,15 @@ pipeline {
                 }
             }
         }
-        stage('Container Clean-Up') {
-            steps {
-                script {
-                    sh 'docker kill $(docker ps -q)'
-                    sh 'docker rm $(docker ps -a -q)'
-                    // sh 'docker rmi $(docker images -q)'
-                }
-            }
-        }
+        // stage('Container Clean-Up') {
+        //     steps {
+        //         script {
+        //             sh 'docker kill $(docker ps -q)'
+        //             sh 'docker rm $(docker ps -a -q)'
+        //             // sh 'docker rmi $(docker images -q)'
+        //         }
+        //     }
+        // }
         stage('Terraform') {
             steps {
                 script {

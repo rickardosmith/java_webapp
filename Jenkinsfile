@@ -64,7 +64,7 @@ pipeline {
                     withCredentials([string(credentialsId: 'dockerHubToken', variable: 'TOKEN')]) {
                         sh """
                             docker login -u wizkiddja -p ${TOKEN}
-                            docker build . -t wizkiddja\demosite:${Git_Revision_Tag}
+                            docker build . -t wizkiddja\\demosite:${Git_Revision_Tag}
                         """
                     }
                 }

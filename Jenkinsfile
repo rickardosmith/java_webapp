@@ -43,7 +43,7 @@ pipeline {
                 script {
                     sh "cp -r ../${env.JOB_NAME}@2/target ."
                     sh 'docker build . -t javawebapp'
-                    sh '[ $(docker ps -a | grep test) ] && docker kill test; docker rm test'
+                    sh 'if [ $(docker ps -a | grep test) ]; then docker kill test && docker rm test; fi'
                     sh 'docker run -d -p 8031:8080 --name test javawebapp'
                 }
             }
@@ -55,15 +55,15 @@ pipeline {
                 }
             }
         }
-        // stage('Container Clean-Up') {
-        //     steps {
-        //         script {
-        //             sh 'docker kill $(docker ps -q)'
-        //             sh 'docker rm $(docker ps -a -q)'
-        //             sh 'docker rmi $(docker images -q)'
-        //         }
-        //     }
-        // }
+        stage('Container Clean-Up') {
+            steps {
+                script {
+                    sh 'docker kill $(docker ps -q)'
+                    sh 'docker rm $(docker ps -a -q)'
+                    // sh 'docker rmi $(docker images -q)'
+                }
+            }
+        }
         stage('Terraform') {
             steps {
                 script {

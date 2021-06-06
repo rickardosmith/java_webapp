@@ -1,5 +1,5 @@
 FROM tomcat:jdk8-corretto
 WORKDIR webapps
-COPY ../*/target/SampleWebApplication.war .
+COPY /tmp/target/SampleWebApplication.war .
 RUN rm -rf ROOT && mv SampleWebApplication.war ROOT.war
-ENTRYPOINT ["bash", "/usr/local/tomcat/bin/startup.sh"]
+ENTRYPOINT ["sh", "/usr/local/tomcat/bin/startup.sh"]

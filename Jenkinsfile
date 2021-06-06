@@ -38,10 +38,21 @@ pipeline {
                 }
             }
         }
+        stage('Build and Launch Tomcat App') {
+            steps {
+                script {
+                    sh """
+                        cp -r ../${env.JOB_NAME}@2/target .
+                        docker build . -t javawebapp
+                        docker run -d -p 80:8080 --name test javawebapp
+                    """
+                }
+            }
+        }
         stage('OWASP ZAP Analysis') {
             steps {
                 script {
-                    sh 'echo Coming soon...'
+                    sh 'docker run -t owasp/zap2docker-stable zap-baseline.py -t http://localhost || true'
                 }
             }
         }
@@ -66,7 +77,7 @@ pipeline {
                     withCredentials([string(credentialsId: 'dockerHubToken', variable: 'TOKEN')]) {
                         sh """
                             docker login -u wizkiddja -p ${TOKEN}
-                            docker build . -t wizkiddja\\demosite:${Git_Revision_Tag}
+                            docker build . -t wizkiddja/demosite:${Git_Revision_Tag}
                         """
                     }
                 }
